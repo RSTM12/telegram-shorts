@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Telegram Shorts</title>
+  <style>
+    body { margin: 0; background: #000; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    iframe { width: 360px; height: 640px; border: none; }
+    .video-container { display: flex; flex-direction: column; align-items: center; }
+  </style>
+</head>
+<body>
+  <div class="video-container" id="video-container"></div>
+
+  <script>
+    const videos = [
+      "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "https://www.youtube.com/embed/3JZ_D3ELwOQ"
+    ];
+    let index = 0;
+
+    function showVideo() {
+      const container = document.getElementById('video-container');
+      container.innerHTML = <iframe src="${videos[index]}" allowfullscreen></iframe>;
+    }
+
+    showVideo();
+
+    // Klik untuk ganti video
+    document.addEventListener('click', () => {
+      index = (index + 1) % videos.length;
+      showVideo();
+    });
+  </script>
+</body>
+</html>

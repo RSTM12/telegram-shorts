@@ -64,7 +64,7 @@ export default function App() {
     const scrollPosition = container.scrollTop;
     const windowHeight = container.clientHeight;
 
-    // Menghitung index berdasarkan posisi scroll
+    // Menghitung index
     const newIndex = Math.round(scrollPosition / windowHeight);
 
     if (newIndex !== activeIndex && videos[newIndex]) {
@@ -75,14 +75,15 @@ export default function App() {
   const VideoSlide = ({ video, index, isActive }) => {
     const [liked, setLiked] = useState(false);
 
-    // Embed URL
+    // Embed URL (Mute default true agar autoplay jalan)
     const embedUrl = `https://www.youtube.com/embed/${video.id}?autoplay=1&mute=${isMuted ? 1 : 0}&controls=0&modestbranding=1&playsinline=1&rel=0&iv_load_policy=3&fs=0&disablekb=1&loop=1`;
 
     return (
-      <div className="w-full h-[100dvh] snap-start shrink-0 relative bg-black flex items-center justify-center overflow-hidden">
+      // HAPUS Flex, ganti jadi Relative Block biasa
+      <div className="w-full h-full snap-start relative bg-black overflow-hidden block">
         
         {/* Container Video */}
-        <div className="absolute inset-0 w-full h-full bg-black z-0">
+        <div className="absolute inset-0 w-full h-full bg-black z-0 flex items-center justify-center">
           {isActive ? (
             <iframe
               key={video.id + isMuted} 
@@ -103,52 +104,53 @@ export default function App() {
         </div>
 
         {/* Overlay Gradasi */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/90 pointer-events-none z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/90 pointer-events-none z-10"></div>
 
         {/* Tombol Tap Suara (Tengah) */}
         {isActive && isMuted && (
           <div className="absolute z-30 inset-0 flex items-center justify-center cursor-pointer" onClick={() => setIsMuted(false)}>
-            <div className="bg-black/40 backdrop-blur-sm p-3 rounded-full animate-pulse border border-white/10">
-              <VolumeX size={24} className="text-white" />
-              <p className="text-[9px] text-white font-bold mt-1 text-center">Tap Suara</p>
+            <div className="bg-black/30 backdrop-blur-sm px-3 py-2 rounded-full animate-pulse border border-white/10 flex items-center gap-2">
+              <VolumeX size={16} className="text-white" />
+              <p className="text-[10px] text-white font-bold">Tap untuk Suara</p>
             </div>
           </div>
         )}
 
-        {/* --- TOMBOL SAMPING KANAN (DIPERKECIL) --- */}
-        <div className="absolute right-3 bottom-20 flex flex-col items-center gap-4 z-40">
+        {/* --- TOMBOL SAMPING KANAN (SUPER KECIL & RAPI) --- */}
+        <div className="absolute right-2 bottom-16 flex flex-col items-center gap-3 z-40">
           
           {/* Tombol Like */}
           <div className="flex flex-col items-center gap-0.5 group cursor-pointer" onClick={() => setLiked(!liked)}>
-             <div className={`p-2.5 rounded-full transition-all ${liked ? 'bg-red-500/20' : 'bg-gray-800/60'}`}>
-                <Heart size={24} className={liked ? "fill-red-500 text-red-500 scale-110" : "text-white"} />
+             <div className={`p-2 rounded-full transition-all ${liked ? 'bg-red-500/20' : 'bg-gray-800/50'}`}>
+                {/* Ukuran ICON diperkecil jadi 20 */}
+                <Heart size={20} className={liked ? "fill-red-500 text-red-500 scale-110" : "text-white"} />
              </div>
-             <span className="text-[10px] font-medium text-white drop-shadow-md">Suka</span>
+             <span className="text-[9px] font-medium text-white drop-shadow-md">Suka</span>
           </div>
           
           {/* Tombol Share */}
           <div className="flex flex-col items-center gap-0.5 cursor-pointer">
-             <div className="bg-gray-800/60 backdrop-blur p-2.5 rounded-full active:scale-90 transition-transform">
-                <Share2 size={24} className="text-white" />
+             <div className="bg-gray-800/50 backdrop-blur p-2 rounded-full active:scale-90 transition-transform">
+                <Share2 size={20} className="text-white" />
              </div>
-             <span className="text-[10px] font-medium text-white drop-shadow-md">Share</span>
+             <span className="text-[9px] font-medium text-white drop-shadow-md">Share</span>
           </div>
 
           {/* Tombol Mute Kecil */}
           <div className="flex flex-col items-center gap-0.5 cursor-pointer" onClick={() => setIsMuted(!isMuted)}>
-             <div className="bg-gray-800/60 backdrop-blur p-2.5 rounded-full active:scale-90 transition-transform">
-                {isMuted ? <VolumeX size={24} className="text-white"/> : <Volume2 size={24} className="text-white"/>}
+             <div className="bg-gray-800/50 backdrop-blur p-2 rounded-full active:scale-90 transition-transform">
+                {isMuted ? <VolumeX size={20} className="text-white"/> : <Volume2 size={20} className="text-white"/>}
              </div>
           </div>
         </div>
 
         {/* --- INFO VIDEO KIRI BAWAH --- */}
-        <div className="absolute left-4 bottom-20 right-16 z-40 text-left pointer-events-none">
-          <div className="flex items-center gap-2 mb-2">
-             <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center font-bold text-[9px]">YT</div>
-             <p className="font-bold text-sm text-white drop-shadow-lg truncate opacity-90">{video.channel}</p>
+        <div className="absolute left-3 bottom-16 right-14 z-40 text-left pointer-events-none">
+          <div className="flex items-center gap-1.5 mb-1.5">
+             <div className="w-5 h-5 bg-red-600 rounded-full flex items-center justify-center font-bold text-[8px]">YT</div>
+             <p className="font-bold text-xs text-white drop-shadow-lg truncate opacity-90">{video.channel}</p>
           </div>
-          <p className="text-xs text-gray-100 line-clamp-2 leading-relaxed font-normal opacity-90">{video.title}</p>
+          <p className="text-[11px] text-gray-100 line-clamp-2 leading-tight font-normal opacity-90">{video.title}</p>
         </div>
       </div>
     );
@@ -173,42 +175,44 @@ export default function App() {
         </div>
       )}
 
-      {/* Main Container - FLEX COLUMN AGAR URUTAN BENAR */}
+      {/* Main Container - HAPUS FLEX, GANTI JADI BLOCK BIASA */}
       <div 
-        className="flex-1 flex flex-col justify-start overflow-y-scroll snap-y snap-mandatory no-scrollbar scroll-smooth relative"
+        className="flex-1 overflow-y-scroll snap-y snap-mandatory no-scrollbar scroll-smooth relative block"
         onScroll={handleScroll}
       >
         {loading && <div className="absolute inset-0 flex items-center justify-center z-50 bg-black"><RefreshCw className="animate-spin text-red-600" size={32}/></div>}
         {error && <div className="absolute inset-0 flex items-center justify-center z-50 p-6 text-center text-red-500 bg-black text-xs"><AlertCircle size={20} className="mb-2"/><p>{error}</p></div>}
         
         {videos.map((video, index) => (
-          <VideoSlide 
-            key={video.id} 
-            video={video} 
-            index={index}
-            isActive={index === activeIndex} 
-          />
+          // Bungkus dalam div agar tinggi pasti 100% layar
+          <div key={video.id} className="w-full h-full">
+            <VideoSlide 
+              video={video} 
+              index={index}
+              isActive={index === activeIndex} 
+            />
+          </div>
         ))}
         
-        {/* Spacer bawah yang lebih kecil agar pas dengan nav bar baru */}
-        <div className="h-[60px] snap-start bg-black shrink-0"></div>
+        {/* Spacer bawah kecil */}
+        <div className="h-[50px] snap-start bg-black w-full"></div>
       </div>
 
-      {/* --- BOTTOM NAV (DIPERKECIL) --- */}
-      <div className="absolute bottom-0 w-full h-[55px] bg-black/90 backdrop-blur border-t border-white/10 flex justify-around items-center z-50 pb-1">
+      {/* --- BOTTOM NAV (LEBIH KECIL LAGI) --- */}
+      <div className="absolute bottom-0 w-full h-[50px] bg-black/90 backdrop-blur border-t border-white/10 flex justify-around items-center z-50 pb-0.5">
         <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center p-2 ${activeTab === 'home' ? 'text-white' : 'text-gray-500'}`}>
-          <Home size={20} strokeWidth={activeTab === 'home' ? 2.5 : 2} />
-          <span className="text-[9px] font-bold mt-0.5">Home</span>
+          {/* Ikon Navigasi diperkecil jadi 18 */}
+          <Home size={18} strokeWidth={activeTab === 'home' ? 2.5 : 2} />
+          <span className="text-[8px] font-bold mt-0.5">Home</span>
         </button>
         
-        {/* Tombol Search Tengah Lebih Kecil */}
-        <button onClick={() => setActiveTab('search')} className="bg-gradient-to-tr from-red-600 to-pink-600 p-2.5 rounded-xl -mt-5 border-2 border-black shadow-lg">
-          <Search size={20} className="text-white" />
+        <button onClick={() => setActiveTab('search')} className="bg-gradient-to-tr from-red-600 to-pink-600 p-2 rounded-lg -mt-4 border-2 border-black shadow-lg active:scale-95 transition-transform">
+          <Search size={18} className="text-white" />
         </button>
 
         <button className="flex flex-col items-center p-2 text-gray-500">
-          <User size={20} />
-          <span className="text-[9px] font-bold mt-0.5">Saya</span>
+          <User size={18} />
+          <span className="text-[8px] font-bold mt-0.5">Saya</span>
         </button>
       </div>
 
